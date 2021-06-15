@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author wraptor
  * @since 0.0.1
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class R<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

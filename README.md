@@ -2,6 +2,7 @@
 easy wrap for springboot
 - 依赖引入后，所有接口返回都会被封装成{code:0,data:{},msg:''}的形式
 - 当接口抛出WrapException，将会封装成{code:-1,msg:''}，且httpStatus为550
+- 当接口不想被封装时，只需要在方法或类上加@NotWrap注解即可
 
 ## 集成
 
@@ -12,7 +13,7 @@ easy wrap for springboot
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -30,7 +31,7 @@ public String hello(){
 ```
 
 response:
-
+`需要注意，此时前端接收到的是jsonString，需要转为对象JSON.parse(jsonString)`
 ```json
 {
   "code": 0,

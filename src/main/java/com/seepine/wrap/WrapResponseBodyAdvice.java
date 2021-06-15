@@ -1,6 +1,7 @@
 package com.seepine.wrap;
 
 import cn.hutool.json.JSONUtil;
+import com.seepine.wrap.annotation.NotWrap;
 import com.seepine.wrap.entity.R;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
  * @author wraptor
@@ -22,6 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 public class WrapResponseBodyAdvice implements ResponseBodyAdvice {
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
+        try {
+            Method method = methodParameter.getMethod();
+            if (method == null) {
+                return true;
+            }
+            // 加了NotWrap注解的才不封装返回值
+            if (method.isAnnotationPresent(NotWrap.class) || method.getDeclaringClass().isAnnotationPresent(NotWrap.class)) {
+                return false;
+            }
+        } catch (Exception ignored) {
+        }
         return true;
     }
 
