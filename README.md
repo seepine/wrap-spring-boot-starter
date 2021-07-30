@@ -13,7 +13,7 @@ easy wrap for springboot
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 

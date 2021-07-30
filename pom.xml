@@ -13,7 +13,7 @@
 
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
 
 
     <!--author-->
@@ -21,8 +21,8 @@
         <developer>
             <name>wraptor</name>
             <email>wraptor@163.com</email>
-            <organization>http://seepine.com</organization>
-            <organizationUrl>http://seepine.com</organizationUrl>
+            <organization>https://github.com/wraptor</organization>
+            <organizationUrl>https://github.com/wraptor</organizationUrl>
         </developer>
     </developers>
     <!--licenses-->
@@ -35,9 +35,9 @@
     </licenses>
     <!--scm-->
     <scm>
-        <url>http://seepine.com</url>
-        <connection>scm:git:https://github.com/seepine/spring-boot-starter-auth.git</connection>
-        <developerConnection>scm:git:https://github.com/seepine/spring-boot-starter-auth.git</developerConnection>
+        <url>https://github.com/wraptor</url>
+        <connection>scm:git:https://github.com/wraptor/spring-boot-starter-wrap.git</connection>
+        <developerConnection>scm:git:https://github.com/wraptor/spring-boot-starter-wrap.git</developerConnection>
     </scm>
 
     <properties>
