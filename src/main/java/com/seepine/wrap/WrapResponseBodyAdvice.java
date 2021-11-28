@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * @author wraptor
+ * @author seepine
  * @since 0.0.1
  */
 @Order(Integer.MIN_VALUE)

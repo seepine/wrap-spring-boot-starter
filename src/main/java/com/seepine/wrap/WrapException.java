@@ -1,7 +1,7 @@
 package com.seepine.wrap;
 
 /**
- * @author wraptor
+ * @author seepine
  * @since 0.0.1
  */
 public class WrapException extends RuntimeException {
