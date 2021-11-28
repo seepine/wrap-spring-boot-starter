@@ -13,8 +13,15 @@ easy wrap for springboot
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
+```
+### 指定拦截包路径
+不指定则默认拦截所有。若有集成Swagger，必须指定，否则可能导致`Unable to infer base url.`
+```yaml
+wrap:
+  #多个路径逗号隔开 com.example.controller1,com.example.controller2
+  scan-packages: com.example.controller
 ```
 
 ## 例子

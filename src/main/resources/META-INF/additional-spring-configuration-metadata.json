@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "wrap.scan-packages",
+      "type": "java.lang.String[]",
+      "description": "要拦截封装的包路径，不填默认拦截所有."
+    },
+    {
+      "name": "wrap.status",
+      "type": "java.lang.Integer",
+      "description": "抛出WrapException的状态码，默认550."
+    }
+  ]
+}

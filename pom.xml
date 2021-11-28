@@ -7,13 +7,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.5.6</version>
+        <relativePath/>
     </parent>
 
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 
 
     <!--author-->
@@ -35,9 +35,9 @@
     </licenses>
     <!--scm-->
     <scm>
-        <url>https://github.com/wraptor</url>
-        <connection>scm:git:https://github.com/wraptor/spring-boot-starter-wrap.git</connection>
-        <developerConnection>scm:git:https://github.com/wraptor/spring-boot-starter-wrap.git</developerConnection>
+        <url>https://github.com/seepine</url>
+        <connection>scm:git:https://github.com/seepine/spring-boot-starter-wrap.git</connection>
+        <developerConnection>scm:git:https://github.com/seepine/spring-boot-starter-wrap.git</developerConnection>
     </scm>
 
     <properties>
@@ -52,9 +52,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-json</artifactId>
-            <version>5.6.5</version>
+            <version>5.7.16</version>
         </dependency>
     </dependencies>
 
