@@ -1,7 +1,9 @@
 # spring-boot-starter-wrap
+
 easy wrap for springboot
+
 - 依赖引入后，所有接口返回都会被封装成{code:0,data:{},msg:''}的形式
-- 当接口抛出WrapException，将会封装成{code:-1,msg:''}，且httpStatus为550
+- 当接口抛出WrapException，将会封装成{code:1,msg:''}
 - 当接口不想被封装时，只需要在方法或类上加@NotWrap注解即可
 
 ## 集成
@@ -13,11 +15,14 @@ easy wrap for springboot
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
+
 ### 指定拦截包路径
+
 不指定则默认拦截所有。若有集成Swagger，必须指定，否则可能导致`Unable to infer base url.`
+
 ```yaml
 wrap:
   #多个路径逗号隔开 com.example.controller1,com.example.controller2
@@ -26,19 +31,20 @@ wrap:
 
 ## 例子
 
-### #1 返回字符串类型
+### 1 返回字符串类型
 
 controller:
 
 ```java
 @RequestMapping("hello")
 public String hello(){
-        return "hello world";
-}
+        return"hello world";
+        }
 ```
 
 response:
-`需要注意，此时前端接收到的是jsonString，需要转为对象JSON.parse(jsonString)`
+`需要注意，个别请求库(例如flutter的dio)接收到的可能是jsonString，需要转为对象JSON.parse(jsonString)`
+
 ```json
 {
   "code": 0,
@@ -46,7 +52,7 @@ response:
 }
 ```
 
-### #2 返回对象类型
+### 2 返回对象类型
 
 entity:
 
@@ -70,7 +76,7 @@ controller:
 @RequestMapping("user")
 public User user(){
         return new User(1L,"jackson",24);
-}
+        }
 ```
 
 response:
@@ -86,40 +92,37 @@ response:
 }
 ```
 
-### #3 带错误信息的异常处理
+### 3 带错误信息的异常处理
 
 controller:
 
 ```java
 @RequestMapping("sum")
-public String sum() throws WrapException{
-    //...
-    throw new WrapException("错误信息");
-    return "sum";
-}
+public String sum()throws WrapException{
+        //...
+        throw new WrapException("错误信息");
+        }
 ```
 
 response:
 
 ```json
 {
-  "code": -1,
+  "code": 1,
   "msg": "错误信息"
 }
 ```
 
-
-### #4 带数据的异常处理
+### 4 带数据的异常处理
 
 controller:
 
 ```java
 @RequestMapping("del")
-public String del() throws WrapException{
-    //...
-    throw new WrapException(new Object(),"错误信息2");
-    return "del";
-}
+public String del()throws WrapException{
+        //...
+        throw new WrapException(new Object(),"错误信息2");
+        }
 ```
 
 response:

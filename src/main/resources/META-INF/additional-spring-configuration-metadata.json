@@ -3,12 +3,22 @@
     {
       "name": "wrap.scan-packages",
       "type": "java.lang.String[]",
-      "description": "要拦截封装的包路径，不填默认拦截所有."
+      "description": "要拦截封装的包路径，暂不支持*通配符，不填默认拦截返回json的所有接口."
     },
     {
       "name": "wrap.status",
       "type": "java.lang.Integer",
-      "description": "抛出WrapException的状态码，默认550."
+      "description": "抛出WrapException异常时的状态码，默认200."
+    },
+    {
+      "name": "wrap.exception-advice-order",
+      "type": "java.lang.Integer",
+      "description": "全局异常捕获order，默认-1000."
+    },
+    {
+      "name": "wrap.response-advice-order",
+      "type": "java.lang.Integer",
+      "description": "拦截封装类order，默认-1000."
     }
   ]
 }

@@ -1,56 +1,53 @@
 package com.seepine.wrap;
 
-import cn.hutool.json.JSONUtil;
 import com.seepine.wrap.annotation.NotWrap;
 import com.seepine.wrap.entity.R;
 import com.seepine.wrap.entity.WrapProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * @author seepine
  * @since 0.0.1
  */
-@Order(Integer.MIN_VALUE)
+@Slf4j
 @RestControllerAdvice
-@EnableConfigurationProperties({WrapProperties.class})
-public class WrapResponseBodyAdvice implements ResponseBodyAdvice {
+public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Ordered {
 
-  private final WrapProperties wrapProperties;
+  @Resource private WrapProperties wrapProperties;
 
-  public WrapResponseBodyAdvice(WrapProperties wrapProperties) {
-    this.wrapProperties = wrapProperties;
+  @Override
+  public int getOrder() {
+    return wrapProperties.getResponseAdviceOrder();
   }
 
   @Override
+  // 返回 true 则下面 beforeBodyWrite方法被调用, 否则就不调用下述方法
   public boolean supports(MethodParameter methodParameter, Class aClass) {
     try {
       Method method = methodParameter.getMethod();
       if (method == null) {
-        return true;
+        return false;
       }
-      // 加了NotWrap注解的才不封装返回值
+      // 加了NotWrap注解的不封装返回值
       if (method.isAnnotationPresent(NotWrap.class)
           || method.getDeclaringClass().isAnnotationPresent(NotWrap.class)) {
         return false;
       }
       // 若有指定扫描包路径
-      if (wrapProperties.getScanPackages() != null) {
+      if (wrapProperties.getScanPackages() != null && wrapProperties.getScanPackages().length > 0) {
         String packagePath = method.getDeclaringClass().getPackage().getName();
         for (String scanPackage : wrapProperties.getScanPackages()) {
           if (packagePath.startsWith(scanPackage)) {
@@ -72,39 +69,30 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice {
       Class aClass,
       ServerHttpRequest serverHttpRequest,
       ServerHttpResponse serverHttpResponse) {
+    // 请求头或相应头包含not-wrap则不包装
+    if (judgeHeader(serverHttpRequest.getHeaders())
+        || judgeHeader(serverHttpResponse.getHeaders())) {
+      return body;
+    }
     if (body instanceof R) {
       return body;
     } else if (body instanceof String) {
-      return JSONUtil.toJsonStr(R.ok(body));
+      JSONObject json = new JSONObject();
+      try {
+        json.put("code", 0);
+        json.put("data", body);
+        json.put("msg", null);
+        return json.toString();
+      } catch (JSONException e) {
+        log.error("body convert to json err:{}", e.getMessage());
+        return body;
+      }
     }
     return R.ok(body);
   }
 
-  @ExceptionHandler(WrapException.class)
-  public Object workflowException(final WrapException e, HttpServletResponse response) {
-    response.setStatus(e.getStatus() == null ? wrapProperties.getStatus() : e.getStatus());
-    return R.failed(e.getData(), e.getMessage());
-  }
-
-  @ExceptionHandler(IllegalArgumentException.class)
-  public R<String> illegalArgumentException(
-      IllegalArgumentException e, HttpServletResponse response) {
-    response.setStatus(wrapProperties.getStatus());
-    return R.failed(e.getMessage());
-  }
-
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public R<String> methodArgumentNotValidException(
-      MethodArgumentNotValidException e, HttpServletResponse response) {
-    response.setStatus(wrapProperties.getStatus());
-    return R.failed(
-        Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
-  }
-
-  @ExceptionHandler(BindException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public R<String> handleBindException(BindException e, HttpServletResponse response) {
-    response.setStatus(wrapProperties.getStatus());
-    return R.failed(e.getAllErrors().get(0).getDefaultMessage());
+  private boolean judgeHeader(HttpHeaders headers) {
+    return headers.containsKey(WrapProperties.NOT_WRAP_HEADER)
+        || headers.containsKey(WrapProperties.NOT_WRAP_HEADER2);
   }
 }

@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.seepine.wrap.WrapResponseBodyAdvice
+  com.seepine.wrap.config.WrapConfigurer,\
+  com.seepine.wrap.WrapResponseBodyAdvice,\
+  com.seepine.wrap.WrapExceptionHandler
