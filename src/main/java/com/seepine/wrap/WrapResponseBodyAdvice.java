@@ -72,6 +72,9 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
     // 请求头或相应头包含not-wrap则不包装
     if (judgeHeader(serverHttpRequest.getHeaders())
         || judgeHeader(serverHttpResponse.getHeaders())) {
+      if (body instanceof R) {
+        return ((R<?>) body).getData();
+      }
       return body;
     }
     if (body instanceof R) {
