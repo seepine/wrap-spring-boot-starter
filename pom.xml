@@ -4,25 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.5</version>
-        <relativePath/>
-    </parent>
-
     <groupId>com.seepine</groupId>
     <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.4.0-beta.1</version>
+    <version>0.4.0-beta.2</version>
 
-
+    <name>spring-boot-starter-wrap</name>
+    <url>https://github.com/seepine/spring-boot-starter-wrap</url>
+    <description>easy wrap for springboot</description>
     <!--author-->
     <developers>
         <developer>
-            <name>wraptor</name>
-            <email>wraptor@163.com</email>
-            <organization>https://github.com/wraptor</organization>
-            <organizationUrl>https://github.com/wraptor</organizationUrl>
+            <name>seepine</name>
+            <email>seepine@outlook.com</email>
+            <organization>https://github.com/seepine</organization>
+            <organizationUrl>https://github.com/seepine</organizationUrl>
         </developer>
     </developers>
     <!--licenses-->
@@ -42,6 +37,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-boot.version>2.6.6</spring-boot.version>
         <spring.checkstyle.plugin>0.0.22</spring.checkstyle.plugin>
     </properties>
 
@@ -55,14 +51,28 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
     <build>
