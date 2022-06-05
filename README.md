@@ -10,12 +10,16 @@ easy wrap for springboot
 
 ### 引入依赖
 
+- Latest
+  Version: [![Maven Central](https://img.shields.io/maven-central/v/com.seepine/wrap-spring-boot-starter.svg)](https://search.maven.org/search?q=g:com.seepine%20a:wrap-spring-boot-starter)
+- Maven:
+
 ```xml
 
 <dependency>
     <groupId>com.seepine</groupId>
-    <artifactId>spring-boot-starter-wrap</artifactId>
-    <version>0.3.0</version>
+    <artifactId>wrap-spring-boot-starter</artifactId>
+    <version>Latest Version</version>
 </dependency>
 ```
 
@@ -36,10 +40,12 @@ wrap:
 controller:
 
 ```java
-@RequestMapping("hello")
-public String hello(){
-        return"hello world";
-        }
+class Controller {
+    @RequestMapping("hello")
+    public String hello() {
+        return "hello world";
+    }
+}
 ```
 
 response:
@@ -73,10 +79,12 @@ class User {
 controller:
 
 ```java
-@RequestMapping("user")
-public User user(){
-        return new User(1L,"jackson",24);
-        }
+class Controller {
+    @RequestMapping("user")
+    public User user() {
+        return new User(1L, "jackson", 24);
+    }
+}
 ```
 
 response:
@@ -97,11 +105,13 @@ response:
 controller:
 
 ```java
-@RequestMapping("sum")
-public String sum()throws WrapException{
-        //...
+class Controller {
+    @RequestMapping("sum")
+    public String sum() {
+        // ...
         throw new WrapException("错误信息");
-        }
+    }
+}
 ```
 
 response:
@@ -118,11 +128,13 @@ response:
 controller:
 
 ```java
-@RequestMapping("del")
-public String del()throws WrapException{
+class Controller {
+    @RequestMapping("del")
+    public String del() {
         //...
-        throw new WrapException(new Object(),"错误信息2");
-        }
+        throw new WrapException(new Object(), "错误信息2");
+    }
+}
 ```
 
 response:

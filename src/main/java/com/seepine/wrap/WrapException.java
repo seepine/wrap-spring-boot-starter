@@ -1,7 +1,7 @@
 package com.seepine.wrap;
 
 /**
- * 抛出该异常表示处于可控状态，若需要系统捕捉记录日志等，最好使用非RuntimeException
+ * 抛出该异常表示处于可控状态，若需要系统捕捉记录日志等，最好使用非WrapException
  *
  * @author seepine
  * @since 0.0.1

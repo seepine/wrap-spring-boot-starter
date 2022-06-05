@@ -31,19 +31,26 @@ public class WrapExceptionHandler implements Ordered {
     return wrapProperties.getExceptionAdviceOrder();
   }
 
+  /**
+   * 拦截流程异常 WrapException
+   *
+   * @param e WrapException
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(WrapException.class)
-  public Object workflowException(final WrapException e, HttpServletResponse response) {
+  public R<Object> workflowException(final WrapException e, HttpServletResponse response) {
     response.setStatus(e.getStatus() == null ? wrapProperties.getStatus() : e.getStatus());
     return R.failed(e.getData(), e.getMessage());
   }
 
-  @ExceptionHandler(IllegalArgumentException.class)
-  public R<String> illegalArgumentException(
-      IllegalArgumentException e, HttpServletResponse response) {
-    response.setStatus(wrapProperties.getStatus());
-    return R.failed(e.getMessage());
-  }
-
+  /**
+   * 拦截绑定参数校验提示语
+   *
+   * @param e e
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public R<String> methodArgumentNotValidException(
       MethodArgumentNotValidException e, HttpServletResponse response) {
@@ -52,14 +59,28 @@ public class WrapExceptionHandler implements Ordered {
         Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
   }
 
+  /**
+   * 拦截绑定参数校验提示语
+   *
+   * @param e e
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(BindException.class)
   public R<String> handleBindException(BindException e, HttpServletResponse response) {
     response.setStatus(wrapProperties.getStatus());
     return R.failed(e.getAllErrors().get(0).getDefaultMessage());
   }
 
+  /**
+   * 拦截接口请求参数格式错误友好提示
+   *
+   * @param e e
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public Object httpMessageNotReadableException(
+  public R<String> httpMessageNotReadableException(
       HttpMessageNotReadableException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
@@ -70,8 +91,15 @@ public class WrapExceptionHandler implements Ordered {
     return R.failed("接口参数格式错误");
   }
 
+  /**
+   * 拦截接口请求参数格式错误友好提示
+   *
+   * @param e e
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  public Object methodArgumentTypeMismatchException(
+  public R<String> methodArgumentTypeMismatchException(
       MethodArgumentTypeMismatchException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
@@ -84,8 +112,15 @@ public class WrapExceptionHandler implements Ordered {
     return R.failed("接口参数格式错误");
   }
 
+  /**
+   * 拦截接口请求方法错误友好提示
+   *
+   * @param e e
+   * @param response res
+   * @return R
+   */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public Object httpRequestMethodNotSupportedException(
+  public R<String> httpRequestMethodNotSupportedException(
       HttpRequestMethodNotSupportedException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
