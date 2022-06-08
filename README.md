@@ -19,7 +19,7 @@ easy wrap for springboot
 <dependency>
     <groupId>com.seepine</groupId>
     <artifactId>wrap-spring-boot-starter</artifactId>
-    <version>Latest Version</version>
+    <version>${Latest-Version}</version>
 </dependency>
 ```
 
