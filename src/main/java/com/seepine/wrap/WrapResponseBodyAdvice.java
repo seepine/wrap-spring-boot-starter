@@ -4,8 +4,6 @@ import com.seepine.wrap.annotation.NotWrap;
 import com.seepine.wrap.entity.R;
 import com.seepine.wrap.entity.WrapProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
@@ -80,16 +78,15 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
     if (body instanceof R) {
       return body;
     } else if (body instanceof String) {
-      JSONObject json = new JSONObject();
-      try {
-        json.put("code", 0);
-        json.put("data", body);
-        json.put("msg", null);
-        return json.toString();
-      } catch (JSONException e) {
-        log.error("body convert to json err:{}", e.getMessage());
-        return body;
-      }
+      return "{\n"
+          + "  \"code\": "
+          + R.SUCCESS
+          + ",\n"
+          + "  \"data\": \""
+          + body
+          + "\",\n"
+          + "  \"msg\": \"\"\n"
+          + "}";
     }
     return R.ok(body);
   }
