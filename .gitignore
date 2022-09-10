@@ -12,12 +12,17 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.settings/
+bin/
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+*.lock
+rebel.xml
+
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,9 +33,35 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
 
 ### VS Code ###
 .vscode/
 
-### macOS ###
+
+### temp ignore ###
+*.cache
+*.diff
+*.patch
+*.tmp
+*.java~
+*.properties~
+*.xml~
+
+### system ignore ###
 .DS_Store
+Thumbs.db
+Servers
+.metadata
+upload
+gen_code
+
+### logs ####
+/logs/
+*.log
+
+### node ###
+node_modules
