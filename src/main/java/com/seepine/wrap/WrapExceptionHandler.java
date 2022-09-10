@@ -1,6 +1,6 @@
 package com.seepine.wrap;
 
-import com.seepine.wrap.entity.R;
+import com.seepine.tool.R;
 import com.seepine.wrap.entity.WrapProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -41,7 +41,7 @@ public class WrapExceptionHandler implements Ordered {
   @ExceptionHandler(WrapException.class)
   public R<Object> workflowException(final WrapException e, HttpServletResponse response) {
     response.setStatus(e.getStatus() == null ? wrapProperties.getStatus() : e.getStatus());
-    return R.failed(e.getData(), e.getMessage());
+    return R.fail(e.getData(), e.getMessage());
   }
 
   /**
@@ -52,11 +52,10 @@ public class WrapExceptionHandler implements Ordered {
    * @return R
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public R<String> methodArgumentNotValidException(
+  public R<Object> methodArgumentNotValidException(
       MethodArgumentNotValidException e, HttpServletResponse response) {
     response.setStatus(wrapProperties.getStatus());
-    return R.failed(
-        Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+    return R.fail(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
   }
 
   /**
@@ -67,9 +66,9 @@ public class WrapExceptionHandler implements Ordered {
    * @return R
    */
   @ExceptionHandler(BindException.class)
-  public R<String> handleBindException(BindException e, HttpServletResponse response) {
+  public R<Object> handleBindException(BindException e, HttpServletResponse response) {
     response.setStatus(wrapProperties.getStatus());
-    return R.failed(e.getAllErrors().get(0).getDefaultMessage());
+    return R.fail(e.getAllErrors().get(0).getDefaultMessage());
   }
 
   /**
@@ -80,15 +79,15 @@ public class WrapExceptionHandler implements Ordered {
    * @return R
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  public R<String> httpMessageNotReadableException(
+  public R<Object> httpMessageNotReadableException(
       HttpMessageNotReadableException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
     if (e.getMessage() != null
         && e.getMessage().contains("Cannot deserialize value of type `long` from String")) {
-      return R.failed("接口参数格式错误，请输入纯数字");
+      return R.fail("接口参数格式错误，请输入纯数字");
     }
-    return R.failed("接口参数格式错误");
+    return R.fail("接口参数格式错误");
   }
 
   /**
@@ -99,7 +98,7 @@ public class WrapExceptionHandler implements Ordered {
    * @return R
    */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  public R<String> methodArgumentTypeMismatchException(
+  public R<Object> methodArgumentTypeMismatchException(
       MethodArgumentTypeMismatchException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
@@ -107,9 +106,9 @@ public class WrapExceptionHandler implements Ordered {
         && e.getMessage()
             .contains(
                 "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'")) {
-      return R.failed("接口参数格式错误，请输入纯数字");
+      return R.fail("接口参数格式错误，请输入纯数字");
     }
-    return R.failed("接口参数格式错误");
+    return R.fail("接口参数格式错误");
   }
 
   /**
@@ -120,10 +119,10 @@ public class WrapExceptionHandler implements Ordered {
    * @return R
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public R<String> httpRequestMethodNotSupportedException(
+  public R<Object> httpRequestMethodNotSupportedException(
       HttpRequestMethodNotSupportedException e, HttpServletResponse response) {
     log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
-    return R.failed(e.getMessage());
+    return R.fail(e.getMessage());
   }
 }

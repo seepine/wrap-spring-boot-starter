@@ -1,7 +1,7 @@
 package com.seepine.wrap;
 
+import com.seepine.tool.R;
 import com.seepine.wrap.annotation.NotWrap;
-import com.seepine.wrap.entity.R;
 import com.seepine.wrap.entity.WrapProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
@@ -78,6 +79,11 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
     if (body instanceof R) {
       return body;
     } else if (body instanceof String) {
+      try {
+        ServletServerHttpResponse res = (ServletServerHttpResponse) serverHttpResponse;
+        res.getServletResponse().setContentType("application/json;charset=UTF-8");
+      } catch (Exception ignored) {
+      }
       return "{\n"
           + "  \"code\": "
           + R.SUCCESS
