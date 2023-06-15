@@ -3,7 +3,6 @@ package com.seepine.wrap;
 import com.seepine.tool.R;
 import com.seepine.wrap.annotation.NotWrap;
 import com.seepine.wrap.entity.WrapProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
@@ -16,19 +15,20 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 /**
  * @author seepine
  * @since 0.0.1
  */
-@Slf4j
 @RestControllerAdvice
 public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Ordered {
 
-  @Resource
-  private WrapProperties wrapProperties;
+  private final WrapProperties wrapProperties;
+
+  public WrapResponseBodyAdvice(WrapProperties wrapProperties) {
+    this.wrapProperties = wrapProperties;
+  }
 
   @Override
   public int getOrder() {

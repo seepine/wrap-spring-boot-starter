@@ -2,7 +2,6 @@ package com.seepine.wrap;
 
 import com.seepine.tool.R;
 import com.seepine.wrap.entity.WrapProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -20,7 +19,6 @@ import java.util.Objects;
  * @author seepine
  * @since 0.3.0
  */
-@Slf4j
 @RestControllerAdvice
 public class WrapExceptionHandler implements Ordered {
 
@@ -81,7 +79,6 @@ public class WrapExceptionHandler implements Ordered {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public R<Object> httpMessageNotReadableException(
       HttpMessageNotReadableException e, HttpServletResponse response) {
-    log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
     if (e.getMessage() != null
         && e.getMessage().contains("Cannot deserialize value of type `long` from String")) {
@@ -100,7 +97,6 @@ public class WrapExceptionHandler implements Ordered {
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public R<Object> methodArgumentTypeMismatchException(
       MethodArgumentTypeMismatchException e, HttpServletResponse response) {
-    log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
     if (e.getMessage() != null
         && e.getMessage()
@@ -121,7 +117,6 @@ public class WrapExceptionHandler implements Ordered {
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   public R<Object> httpRequestMethodNotSupportedException(
       HttpRequestMethodNotSupportedException e, HttpServletResponse response) {
-    log.warn(e.getMessage());
     response.setStatus(wrapProperties.getStatus());
     return R.fail(e.getMessage());
   }
