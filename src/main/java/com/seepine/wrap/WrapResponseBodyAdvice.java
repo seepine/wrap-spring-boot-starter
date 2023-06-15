@@ -8,9 +8,11 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
@@ -25,7 +27,8 @@ import java.lang.reflect.Method;
 @RestControllerAdvice
 public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Ordered {
 
-  @Resource private WrapProperties wrapProperties;
+  @Resource
+  private WrapProperties wrapProperties;
 
   @Override
   public int getOrder() {
@@ -34,7 +37,7 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
 
   @Override
   // 返回 true 则下面 beforeBodyWrite方法被调用, 否则就不调用下述方法
-  public boolean supports(MethodParameter methodParameter, Class aClass) {
+  public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
     try {
       Method method = methodParameter.getMethod();
       if (method == null) {
@@ -62,10 +65,10 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
 
   @Override
   public Object beforeBodyWrite(
-      Object body,
+      @Nullable Object body,
       MethodParameter methodParameter,
       MediaType mediaType,
-      Class aClass,
+      Class<? extends HttpMessageConverter<?>> aClass,
       ServerHttpRequest serverHttpRequest,
       ServerHttpResponse serverHttpResponse) {
     // 请求头或相应头包含not-wrap则不包装
@@ -76,14 +79,14 @@ public class WrapResponseBodyAdvice implements ResponseBodyAdvice<Object>, Order
       }
       return body;
     }
+    try {
+      ServletServerHttpResponse res = (ServletServerHttpResponse) serverHttpResponse;
+      res.getServletResponse().setContentType("application/json;charset=UTF-8");
+    } catch (Exception ignored) {
+    }
     if (body instanceof R) {
       return body;
     } else if (body instanceof String) {
-      try {
-        ServletServerHttpResponse res = (ServletServerHttpResponse) serverHttpResponse;
-        res.getServletResponse().setContentType("application/json;charset=UTF-8");
-      } catch (Exception ignored) {
-      }
       return "{\n"
           + "  \"code\": "
           + R.SUCCESS
